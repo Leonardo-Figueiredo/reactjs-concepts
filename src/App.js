@@ -10,24 +10,27 @@ function App() {
   useEffect( () => {
     api.get('repositories').then(response => {
       const repositories = response.data;
-      setRepositories([...repositories]);
- 
+      setRepositories([...repositories]); 
     });    
     
-  }, [repositories])
+  }, [])
 
   async function handleAddRepository() {
-    await api.post('/repositories', {
-      title:"ReactJS",
+    const { data }= await api.post('/repositories', {
+      title:"Leléo",
 	    url:"https://github.com/facebook/react",
 	    techs:["Java Script", "Node.js"]	
     });
-    
+
+    const newRepository = data;
+    setRepositories([...repositories, newRepository]);    
   }
 
 
   async function handleRemoveRepository(id) {
     await api.delete(`repositories/${id}`);
+
+    setRepositories(repositories.filter((repository => repository.id !== id)));
   }
 
   return (
